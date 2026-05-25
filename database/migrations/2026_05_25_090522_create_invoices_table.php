@@ -17,18 +17,18 @@ return new class extends Migration
             $table->foreignId('pph_type_id')->nullable()->constrained('pph_types')->onDelete('set null');
             $table->foreignId('pic_id')->nullable()->constrained('pics')->onDelete('set null');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->string('invoice_number');
-            $table->string('reference_number');
+            $table->string('invoice_number')->nullable();
+            $table->string('reference_number')->nullable();
             $table->boolean('input_status')->default(false);
             $table->boolean('payment_status')->default(false);
-            $table->date('invoice_date');
-            $table->date('payment_date');
-            $table->integer('base_amount');
-            $table->integer('gross_up_amount');
-            $table->integer('pph_amount');
-            $table->integer('take_home_pay');
-            $table->integer('djp_tax_amount');
-            $table->string('note');
+            $table->date('invoice_date')->nullable();
+            $table->date('payment_date')->nullable();
+            $table->integer('base_amount')->nullable();
+            $table->integer('gross_up_amount')->nullable();
+            $table->integer('pph_amount')->nullable();
+            $table->integer('take_home_pay')->nullable();
+            $table->integer('djp_tax_amount')->nullable();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

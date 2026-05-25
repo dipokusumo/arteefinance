@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('pics', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email');
-            $table->string('phone');
+            $table->string('name')->required();
+            $table->string('email')->required();
+            $table->string('phone')->required();
             $table->timestamps();
         });
     }

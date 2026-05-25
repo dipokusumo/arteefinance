@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('pph_types', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-            $table->string('description');
-            $table->decimal('tax_rate', 5, 2);
+            $table->string('code')->required();
+            $table->string('description')->nullable();
+            $table->decimal('tax_rate', 5, 2)->required();
             $table->timestamps();
         });
     }
