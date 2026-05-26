@@ -27,6 +27,8 @@ class PicResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'PIC';
 
+    protected static ?string $pluralLabel = 'PICs';
+
     public static function form(Schema $schema): Schema
     {
         return PicForm::configure($schema);

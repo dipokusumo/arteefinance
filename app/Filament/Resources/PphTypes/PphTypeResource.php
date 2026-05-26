@@ -27,6 +27,8 @@ class PphTypeResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'PPh Type';
 
+    protected static ?string $pluralLabel = 'PPh Types';
+
     public static function form(Schema $schema): Schema
     {
         return PphTypeForm::configure($schema);
