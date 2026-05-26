@@ -23,6 +23,8 @@ class RoleResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Data Master';
 
+    protected static ?int $navigationSort = 10000;
+
     protected static ?string $recordTitleAttribute = 'Role';
 
     public static function form(Schema $schema): Schema

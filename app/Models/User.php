@@ -30,9 +30,19 @@ class User extends Authenticatable
         ];
     }
 
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (app()->runningInConsole()) {
+                // dibuat lewat "php artisan make:filament-user"
+                $user->role = 'admin';
+            }
+        });
+    }
+
     public function role()
     {
-        return $this->hasOne(Roles::class);
+        return $this->belongsTo(Roles::class);
     }
 
     public function invoices()
