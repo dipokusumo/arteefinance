@@ -21,7 +21,7 @@ class RoleResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ShieldCheck;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Data Master';
+    protected static string|UnitEnum|null $navigationGroup = 'Master Data';
 
     protected static ?int $navigationSort = 10000;
 
