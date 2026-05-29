@@ -17,7 +17,7 @@ class UsersTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('Email Address')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('role.name')

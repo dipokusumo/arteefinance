@@ -17,7 +17,7 @@ class UserForm
                     TextInput::make('name')
                         ->required(),
                     TextInput::make('email')
-                        ->label('Email address')
+                        ->label('Email Address')
                         ->email()
                         ->required()
                         ->unique(ignoreRecord: true),

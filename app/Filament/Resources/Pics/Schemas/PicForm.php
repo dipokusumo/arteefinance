@@ -17,7 +17,7 @@ class PicForm
                         ->required()
                         ->unique(ignoreRecord: true),
                     TextInput::make('email')
-                        ->label('Email address')
+                        ->label('Email Address')
                         ->required()
                         ->email(),
                     TextInput::make('phone')

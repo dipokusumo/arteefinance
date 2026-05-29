@@ -16,8 +16,10 @@ class TaxpayerForm
                     TextInput::make('name')
                         ->required()
                         ->unique(ignoreRecord: true),
-                    TextInput::make('npwp'),
-                    TextInput::make('nik'),
+                    TextInput::make('npwp')
+                        ->label('NPWP'),
+                    TextInput::make('nik')
+                        ->label('NIK'),
                     TextInput::make('address'),
                 ])
             ]);
