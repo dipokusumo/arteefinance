@@ -28,6 +28,7 @@ class PphTypeForm
                         ->inputMode('decimal')
                         ->step(0.001),
                     TextInput::make('tax_rate')
+                        ->label('Tax Rate')
                         ->required()
                         ->numeric()
                         ->suffix('%')

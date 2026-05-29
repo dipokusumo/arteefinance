@@ -21,6 +21,7 @@ class PphTypesTable
                 TextColumn::make('factor')
                     ->numeric(decimalPlaces: 3),
                 TextColumn::make('tax_rate')
+                    ->label('Tax Rate')
                     ->numeric()
                     ->suffix('%')
                     ->sortable(),
