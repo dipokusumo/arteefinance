@@ -20,6 +20,7 @@ class PphTypeForm
                     Textarea::make('description')
                         ->rows(5),
                     TextInput::make('tax_rate')
+                        ->label('Tax Rate')
                         ->required()
                         ->numeric()
                         ->suffix('%')

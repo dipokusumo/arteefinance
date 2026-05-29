@@ -17,7 +17,7 @@ class PicsTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('Email Address')
                     ->searchable(),
                 TextColumn::make('phone')
                     ->searchable(),

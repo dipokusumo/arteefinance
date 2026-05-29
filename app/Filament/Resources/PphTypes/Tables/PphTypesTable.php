@@ -19,6 +19,7 @@ class PphTypesTable
                 TextColumn::make('description')
                     ->limit(50),
                 TextColumn::make('tax_rate')
+                    ->label('Tax Rate')
                     ->numeric()
                     ->suffix('%')
                     ->sortable(),

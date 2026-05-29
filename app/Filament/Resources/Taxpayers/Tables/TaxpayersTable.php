@@ -17,8 +17,10 @@ class TaxpayersTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('npwp')
+                    ->label('NPWP')
                     ->searchable(),
                 TextColumn::make('nik')
+                    ->label('NIK')
                     ->searchable(),
             ])
             ->filters([
