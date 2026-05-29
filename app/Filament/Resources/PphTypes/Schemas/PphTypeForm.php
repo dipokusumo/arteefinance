@@ -21,7 +21,9 @@ class PphTypeForm
                     Textarea::make('description')
                         ->rows(5),
                     TextInput::make('factor')
-                        ->label('Factor')
+                        ->label('Factor'),
+                    TextInput::make('tax_rate')
+                        ->label('Tax Rate')
                         ->required()
                         ->numeric()
                         ->inputMode('decimal')
