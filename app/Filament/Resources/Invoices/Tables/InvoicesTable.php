@@ -16,32 +16,24 @@ class InvoicesTable
     {
         return $table
             ->columns([
-                TextColumn::make('taxpayer_id')
-                    ->numeric()
+                TextColumn::make('taxpayer.name')
+                    ->label('Wajib Pajak')
                     ->sortable(),
-                TextColumn::make('pph_type_id')
-                    ->numeric()
+                TextColumn::make('pic.name')
+                    ->label('PIC')
                     ->sortable(),
-                TextColumn::make('pic_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_by')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('invoice_number')
-                    ->searchable(),
-                TextColumn::make('reference_number')
-                    ->searchable(),
                 IconColumn::make('input_status')
                     ->boolean(),
                 IconColumn::make('payment_status')
                     ->boolean(),
                 TextColumn::make('invoice_date')
-                    ->date()
+                    ->date($format = 'd/m/Y')
                     ->sortable(),
                 TextColumn::make('payment_date')
-                    ->date()
+                    ->date($format = 'd/m/Y')
                     ->sortable(),
+                TextColumn::make('pphType.code')
+                    ->searchable(),
                 TextColumn::make('base_amount')
                     ->numeric()
                     ->sortable(),
@@ -57,6 +49,10 @@ class InvoicesTable
                 TextColumn::make('djp_tax_amount')
                     ->numeric()
                     ->sortable(),
+                TextColumn::make('invoice_number')
+                    ->searchable(),
+                TextColumn::make('reference_number')
+                    ->searchable(),
                 TextColumn::make('note')
                     ->searchable(),
                 TextColumn::make('created_at')
@@ -67,6 +63,9 @@ class InvoicesTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('creator.name')
+                    ->numeric()
+                    ->sortable(),
             ])
             ->filters([
                 //

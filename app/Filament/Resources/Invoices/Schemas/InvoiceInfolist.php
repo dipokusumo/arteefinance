@@ -12,17 +12,17 @@ class InvoiceInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('taxpayer_id')
-                    ->numeric()
+                TextEntry::make('taxpayer.name')
+                    ->label('Wajib Pajak')
                     ->placeholder('-'),
-                TextEntry::make('pph_type_id')
-                    ->numeric()
+                TextEntry::make('pphType.code')
+                    ->label('Jenis PPH')
                     ->placeholder('-'),
-                TextEntry::make('pic_id')
-                    ->numeric()
+                TextEntry::make('pic.name')
+                    ->label('PIC')
                     ->placeholder('-'),
-                TextEntry::make('created_by')
-                    ->numeric()
+                TextEntry::make('creator.name')
+                    ->label('Dibuat Oleh')
                     ->placeholder('-'),
                 TextEntry::make('invoice_number')
                     ->placeholder('-'),
@@ -33,10 +33,10 @@ class InvoiceInfolist
                 IconEntry::make('payment_status')
                     ->boolean(),
                 TextEntry::make('invoice_date')
-                    ->date()
+                    ->date(format: 'd/m/Y')
                     ->placeholder('-'),
                 TextEntry::make('payment_date')
-                    ->date()
+                    ->date(format: 'd/m/Y')
                     ->placeholder('-'),
                 TextEntry::make('base_amount')
                     ->numeric()

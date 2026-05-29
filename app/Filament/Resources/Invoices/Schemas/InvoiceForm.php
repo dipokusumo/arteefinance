@@ -100,7 +100,7 @@ class InvoiceForm
 
                         TextInput::make('pph_amount')
                             ->label('Nilai PPH')
-                            ->numeric()
+
                             ->disabled()
                             ->prefix('IDR'),
 
@@ -118,7 +118,6 @@ class InvoiceForm
 
                         TextInput::make('djp_tax_amount')
                             ->label('Nilai Pajak DJP')
-                            ->numeric()
                             ->disabled()
                             ->prefix('IDR'),
 

@@ -11,7 +11,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('pph_types', function (Blueprint $table) {
-            $table->decimal('factor', 5, 3)->after('description')->nullable();
+            $table->decimal('factor', 5, 3)
+                ->nullable()
+                ->change();
         });
     }
 
@@ -21,7 +23,9 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('pph_types', function (Blueprint $table) {
-            Schema::dropifexists('factor');
+            $table->decimal('factor', 5, 2)
+                ->nullable()
+                ->change();
         });
     }
 };
