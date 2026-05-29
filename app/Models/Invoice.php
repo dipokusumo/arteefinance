@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\ParseCurrency;
 
 class Invoice extends Model
 {
@@ -44,6 +45,35 @@ class Invoice extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Invoice $invoice): void {
+            $invoice->base_amount = ParseCurrency::parseCurrency($invoice->base_amount);
+
+            if (!$invoice->pphType || !$invoice->base_amount) {
+                $invoice->pph_amount = 0;
+                $invoice->gross_up_amount = 0;
+                $invoice->take_home_pay = 0;
+                $invoice->djp_tax_amount = 0;
+
+                return;
+            }
+
+            $factor = (float) $invoice->pphType->factor;
+
+            $pphAmount = $invoice->base_amount * $factor;
+
+            $grossUpAmount = $invoice->base_amount + $pphAmount;
+
+            $takeHomePay = $grossUpAmount - $pphAmount;
+
+            $invoice->pph_amount = $pphAmount;
+            $invoice->gross_up_amount = $grossUpAmount;
+            $invoice->take_home_pay = $takeHomePay;
+            $invoice->djp_tax_amount = $pphAmount;
+        });
     }
 
 }

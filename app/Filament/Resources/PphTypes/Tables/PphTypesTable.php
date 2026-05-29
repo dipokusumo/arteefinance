@@ -18,6 +18,8 @@ class PphTypesTable
                     ->sortable(),
                 TextColumn::make('description')
                     ->limit(50),
+                TextColumn::make('factor')
+                    ->numeric(decimalPlaces: 2),
                 TextColumn::make('tax_rate')
                     ->numeric()
                     ->suffix('%')

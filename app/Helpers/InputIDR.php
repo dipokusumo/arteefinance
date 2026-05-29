@@ -15,7 +15,7 @@ if (!function_exists('InputIDR')) {
                 fn($state) =>
                 $state === null
                 ? null
-                : number_format((float) $state, 0, ',', '.')
+                : number_format((float) $state, 0, '.', '.')
             )
 
             // SAAT USER NGETIK
@@ -36,7 +36,7 @@ if (!function_exists('InputIDR')) {
                     return;
                 }
 
-                $formatted = number_format((float) $numeric, 0, ',', '.');
+                $formatted = number_format((float) $numeric, 0, '.', '.');
 
                 $set(
                     $name,

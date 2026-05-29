@@ -9,6 +9,7 @@ class PphType extends Model
     protected $fillable = [
         'code',
         'description',
+        'factor',
         'tax_rate',
     ];
 

@@ -4,6 +4,9 @@ namespace App\Filament\Resources\PphTypes\Schemas;
 
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextInputColumn;
+
+
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
 
@@ -19,6 +22,11 @@ class PphTypeForm
                         ->unique(ignoreRecord: true),
                     Textarea::make('description')
                         ->rows(5),
+                    TextInput::make('factor')
+                        ->label('Faktor')
+                        ->numeric()
+                        ->inputMode('decimal')
+                        ->step(0.001),
                     TextInput::make('tax_rate')
                         ->required()
                         ->numeric()
