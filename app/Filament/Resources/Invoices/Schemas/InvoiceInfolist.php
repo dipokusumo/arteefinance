@@ -18,15 +18,12 @@ class InvoiceInfolist
     {
         return $schema
             ->components([
-                Section::make('Informasi Umum')->columnSpanFull()->columns(3)->schema([
+                Section::make('Informasi Umum')->columnSpanFull()->columns(2)->schema([
                     TextEntry::make('taxpayer.name')
                         ->label('Wajib Pajak')
                         ->placeholder('-'),
                     TextEntry::make('pic.name')
                         ->label('PIC')
-                        ->placeholder('-'),
-                    TextEntry::make('project_name')
-                        ->label('Nama Projek')
                         ->placeholder('-'),
                 ]),
                 Section::make('Detail Invoice')->columnSpanFull()->columns(2)->schema([
