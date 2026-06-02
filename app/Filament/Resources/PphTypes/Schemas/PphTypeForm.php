@@ -24,13 +24,18 @@ class PphTypeForm
                         ->rows(5),
                     TextInput::make('factor')
                         ->label('Faktor')
+                        ->required()
                         ->numeric()
                         ->inputMode('decimal')
-                        ->step(0.001),
+                        ->step(0.001)
+                        ->suffix('%')
+                        ->helperText('Enter the factor as a percentage (e.g., 10 for 10%) and use comma as decimal separator if needed (e.g., 2,5 for 2.5%).'),
                     TextInput::make('tax_rate')
                         ->label('Tax Rate')
                         ->required()
                         ->numeric()
+                        ->inputMode('decimal')
+                        ->step(0.01)
                         ->suffix('%')
                         ->helperText('Enter the tax rate as a percentage (e.g., 10 for 10%) and use comma as decimal separator if needed (e.g., 2,5 for 2.5%).'),
                 ])
