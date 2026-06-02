@@ -13,6 +13,7 @@ class Invoice extends Model
         'pph_type_id',
         'pic_id',
         'created_by',
+        'project_name',
         'invoice_number',
         'reference_number',
         'input_status',
