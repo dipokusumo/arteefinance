@@ -27,6 +27,10 @@ class TaxpayerResource extends Resource
     
     protected static ?string $recordTitleAttribute = 'Taxpayer';
 
+    protected static ?string $pluralLabel = 'Taxpayers';
+
+    protected static ?string $label = 'Taxpayer';
+
     public static function form(Schema $schema): Schema
     {
         return TaxpayerForm::configure($schema);

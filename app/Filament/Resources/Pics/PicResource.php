@@ -29,6 +29,8 @@ class PicResource extends Resource
 
     protected static ?string $pluralLabel = 'PICs';
 
+    protected static ?string $label = 'PIC';
+
     public static function form(Schema $schema): Schema
     {
         return PicForm::configure($schema);

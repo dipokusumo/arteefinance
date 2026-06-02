@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Invoices\Schemas;
 
-use function App\Helpers\ParseCurrency;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 
@@ -42,11 +41,11 @@ class InvoiceForm
 
             $pphFactor = (float) $pphType->factor;
 
-            $grossUpAmount = ($baseAmount / $pphFactor);
+            $grossUpAmount = $baseAmount * $pphFactor;
 
-            $pphAmount = ($grossUpAmount - $baseAmount);
+            $pphAmount = $grossUpAmount + $baseAmount;
 
-            $takeHomePay = $baseAmount;
+            $takeHomePay = $grossUpAmount - $pphAmount;
 
             $set('pph_amount', ParseCurrency::formatIDR($pphAmount));
             $set('gross_up_amount', ParseCurrency::formatIDR($grossUpAmount));
@@ -91,7 +90,7 @@ class InvoiceForm
                             ->required(),
 
                         Select::make('pph_type_id')
-                            ->label('Jenis PPH')
+                            ->label('Jenis PPh')
                             ->relationship('pphType', 'code')
                             ->required()
                             ->live(debounce: 500)
@@ -103,15 +102,13 @@ class InvoiceForm
                             ->afterStateUpdated(fn($state, callable $set, callable $get) => $calculateTax($get, $set)),
 
                         TextInput::make('pph_amount')
-                            ->label('Nilai PPH')
-
+                            ->label('Nilai PPh')
                             ->disabled()
                             ->prefix('IDR'),
 
                         TextInput::make('gross_up_amount')
                             ->label('Nilai Gross Up')
                             ->disabled()
-                            ->required()
                             ->prefix('IDR'),
 
                         TextInput::make('take_home_pay')
@@ -128,23 +125,29 @@ class InvoiceForm
                         Fieldset::make('Informasi Tambahan')
                             ->contained(false)
                             ->schema([
-                                TextInput::make('invoice_number'),
-                                TextInput::make('reference_number'),
-                                TextInput::make('note'),
-                            ])->columns(2)->columnSpan('full')
+                                TextInput::make('invoice_number')
+                                    ->label('Nomor Invoice'),
+                                TextInput::make('reference_number')
+                                    ->label('Nomor Referensi'),
+                                TextInput::make('note')
+                                    ->label('Catatan'),
+                            ])->columns(3)->columnSpan('full')
                     ]),
 
                 Fieldset::make('Status')
                     ->schema([
                         Toggle::make('input_status')
+                            ->label('Status Input')
                             ->required(),
                         Toggle::make('payment_status')
+                            ->label('Status Pembayaran')
                             ->required(),
                     ])
                     ->label('Status')
                     ->columns(2)
                     ->columnSpan('full'),
                 Hidden::make('created_by')
+                    ->label('Dibuat Oleh')
                     ->default(auth()->id()),
             ]);
     }
