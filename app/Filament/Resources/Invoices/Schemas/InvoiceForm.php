@@ -41,9 +41,9 @@ class InvoiceForm
 
             $pphFactor = (float) $pphType->factor;
 
-            $grossUpAmount = $baseAmount * $pphFactor;
+            $pphAmount = $baseAmount * $pphFactor;
 
-            $pphAmount = $grossUpAmount + $baseAmount;
+            $grossUpAmount = $baseAmount + $pphAmount;
 
             $takeHomePay = $grossUpAmount - $pphAmount;
 
