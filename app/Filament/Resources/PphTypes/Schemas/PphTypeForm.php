@@ -21,13 +21,12 @@ class PphTypeForm
                     Textarea::make('description')
                         ->rows(5),
                     TextInput::make('factor')
-                        ->label('Faktor')
+                        ->label('Factor')
                         ->required()
                         ->numeric()
                         ->inputMode('decimal')
                         ->step(0.001)
-                        ->suffix('%')
-                        ->helperText('Enter the factor as a percentage (e.g., 10 for 10%) and use comma as decimal separator if needed (e.g., 2,5 for 2.5%).'),
+                        ->helperText('Enter the factor as a decimal number (e.g., 1.000 for no adjustment, 0.975 for a 2.5% reduction). Use comma as decimal separator if needed (e.g., 1,111 for 1.111).'),
                     TextInput::make('tax_rate')
                         ->label('Tax Rate')
                         ->required()
