@@ -66,9 +66,9 @@ class Invoice extends Model
 
             $factor = (float) $pphType->factor;
 
-            $taxRate = (float) $pphType->tax_rate;
+            $taxRate = (float) $invoice->pphType->tax_rate;
 
-            $isGrossUp = (bool) $pphType->is_gross_up;
+            $isGrossUp = (bool) $invoice->pphType->is_gross_up;
 
             $pphAmount = $invoice->base_amount / $factor * $taxRate / 100;
 

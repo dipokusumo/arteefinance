@@ -41,11 +41,21 @@ class InvoiceForm
 
             $pphFactor = (float) $pphType->factor;
 
-            $grossUpAmount = $baseAmount * $pphFactor;
+            $pphTaxRate = (float) $pphType->tax_rate;
 
-            $pphAmount = $grossUpAmount + $baseAmount;
+            $isGrossUp = (bool) $pphType->is_gross_up;
 
-            $takeHomePay = $grossUpAmount - $pphAmount;
+            $pphAmount = $baseAmount / $pphFactor * $pphTaxRate / 100;
+
+            if ($isGrossUp) {
+                $grossUpAmount = $baseAmount + $pphAmount;
+
+                $takeHomePay = $grossUpAmount - $pphAmount;
+            } else {
+                $grossUpAmount = $baseAmount;
+
+                $takeHomePay = $baseAmount - $pphAmount;
+            }
 
             $set('pph_amount', ParseCurrency::formatIDR($pphAmount));
             $set('gross_up_amount', ParseCurrency::formatIDR($grossUpAmount));
