@@ -11,6 +11,7 @@ class PphType extends Model
         'description',
         'factor',
         'tax_rate',
+        'is_gross_up',
     ];
 
     public function invoices()

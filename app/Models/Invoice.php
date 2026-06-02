@@ -64,11 +64,21 @@ class Invoice extends Model
 
             $factor = (float) $invoice->pphType->factor;
 
-            $pphAmount = $invoice->base_amount * $factor;
+            $taxRate = (float) $invoice->pphType->tax_rate;
 
-            $grossUpAmount = $invoice->base_amount + $pphAmount;
+            $isGrossUp = (bool) $invoice->pphType->is_gross_up;
 
-            $takeHomePay = $grossUpAmount - $pphAmount;
+            $pphAmount = $invoice->base_amount / $factor * $taxRate / 100;
+
+            if ($isGrossUp) {
+                $grossUpAmount = $invoice->base_amount + $pphAmount;
+
+                $takeHomePay = $grossUpAmount - $pphAmount;
+            } else {
+                $grossUpAmount = $invoice->base_amount;
+
+                $takeHomePay = $invoice->base_amount - $pphAmount;
+            }
 
             $invoice->pph_amount = $pphAmount;
             $invoice->gross_up_amount = $grossUpAmount;
@@ -76,5 +86,4 @@ class Invoice extends Model
             $invoice->djp_tax_amount = $pphAmount;
         });
     }
-
 }
