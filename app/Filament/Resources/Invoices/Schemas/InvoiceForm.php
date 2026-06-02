@@ -72,7 +72,11 @@ class InvoiceForm
                             ->preload()
                             ->relationship('pic', 'name')
                             ->required(),
-
+                        TextInput::make('project_name')
+                            ->label('Nama Projek')
+                            ->required()
+                            ->columnOrder(3)
+                            ->columnSpan(2),
                     ]),
                 Fieldset::make('Detail Invoice')
                     ->columns(2)
