@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Taxpayers\Tables;
 
+use App\Filament\Imports\TaxpayerImporter;
+use Filament\Actions\ImportAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
@@ -26,11 +28,14 @@ class TaxpayersTable
             ->filters([
                 //
             ])
+            ->headerActions([
+                ImportAction::make()
+                    ->importer(TaxpayerImporter::class)
+            ])
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
             ])
-            ->toolbarActions([
-            ]);
+            ->toolbarActions([]);
     }
 }
