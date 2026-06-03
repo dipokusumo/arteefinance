@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Invoices\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
@@ -14,6 +15,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Filament\Tables\Enums\FiltersLayout;
+use App\Filament\Exports\InvoiceExporter;
 
 
 
@@ -203,6 +205,10 @@ class InvoicesTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->label('Export Excel')
+                        ->exporter(InvoiceExporter::class)
+                        ->icon('heroicon-s-document-arrow-down'),
                     DeleteBulkAction::make(),
                 ]),
             ]);
