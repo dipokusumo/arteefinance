@@ -22,6 +22,10 @@ use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Taxpayer;
 use App\Models\Pic;
+use Filament\Tables\Enums\FiltersLayout;
+use App\Filament\Exports\InvoiceExporter;
+
+
 
 class InvoicesTable
 {
