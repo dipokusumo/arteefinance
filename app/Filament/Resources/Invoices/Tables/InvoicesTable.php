@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Invoices\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
@@ -18,6 +19,9 @@ use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Taxpayer;
 use App\Models\Pic;
+use App\Filament\Exports\InvoiceExporter;
+
+
 
 class InvoicesTable
 {
@@ -327,6 +331,10 @@ class InvoicesTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->label('Export Excel')
+                        ->exporter(InvoiceExporter::class)
+                        ->icon('heroicon-s-document-arrow-down'),
                     DeleteBulkAction::make(),
                 ]),
             ]);
