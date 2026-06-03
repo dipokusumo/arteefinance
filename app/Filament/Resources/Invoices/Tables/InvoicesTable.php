@@ -15,13 +15,10 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Filters\Filter;
-use Illuminate\Database\Eloquent\Builder;
-use App\Models\Taxpayer;
-use App\Models\Pic;
+use Filament\Tables\Enums\FiltersLayout;
+use App\Filament\Exports\InvoiceExporter;
+
+
 
 class InvoicesTable
 {
