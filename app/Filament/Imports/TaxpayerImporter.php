@@ -24,18 +24,41 @@ class TaxpayerImporter extends Importer
             ->title()
             ->toString();
 
-        $replacements = [
-            'Pt ' => 'PT ',
-            'Cv ' => 'CV ',
-            'Ud ' => 'UD ',
-            'Tbk' => 'Tbk',
+        // Singkatan yang harus selalu uppercase
+        $abbreviations = [
+            'Pt' => 'PT',
+            'Pt.' => 'PT',
+            'Cv' => 'CV',
+            'Cv.' => 'CV',
+            'Ud' => 'UD',
+            'Ud.' => 'UD',
             'Pkp' => 'PKP',
-            'Bumd' => 'BUMD',
             'Bumn' => 'BUMN',
-            'Persero' => 'Persero',
+            'Bumd' => 'BUMD',
         ];
 
-        return strtr($name, $replacements);
+        $words = preg_split('/\s+/', $name);
+
+        foreach ($words as &$word) {
+            $cleanWord = rtrim($word, '.');
+
+            if (isset($abbreviations[$cleanWord])) {
+                $word = $abbreviations[$cleanWord];
+            }
+        }
+
+        // Tangani inisial seperti J.H, A.B.C, dll
+        $name = implode(' ', $words);
+
+        $name = preg_replace_callback(
+            '/\b([A-Za-z])(?:\.([A-Za-z]))+\b/',
+            function ($matches) {
+                return strtoupper($matches[0]);
+            },
+            $name
+        );
+
+        return $name;
     }
 
     protected static function formatIdentityNumber(mixed $value): ?string
@@ -44,16 +67,7 @@ class TaxpayerImporter extends Importer
             return null;
         }
 
-        // Hilangkan spasi
-        $value = trim((string) $value);
-
-        // Jika scientific notation
-        if (str_contains(strtoupper($value), 'E')) {
-            return sprintf('%.0f', (float) $value);
-        }
-
-        // Hanya angka
-        return preg_replace('/\D/', '', $value);
+        return preg_replace('/\s+/', '', (string) $value);
     }
 
     public static function getColumns(): array
