@@ -23,9 +23,9 @@ use App\Models\Pic;
 use App\Filament\Exports\InvoiceExporter;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Grid;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Get;
 use Filament\Tables\Filters\Indicator;
+use App\Filament\Imports\InvoiceImporter;
+use Filament\Actions\ImportAction;
 
 
 
@@ -354,6 +354,10 @@ class InvoicesTable
 
             ], layout: FiltersLayout::AboveContentCollapsible)
             ->filtersFormColumns(1)   // outer shell is 1 col; sections control inner layout
+            ->headerActions([
+                ImportAction::make()
+                    ->importer(InvoiceImporter::class)
+            ])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
