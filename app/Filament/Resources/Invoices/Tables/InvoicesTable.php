@@ -42,6 +42,10 @@ class InvoicesTable
                     ->label('PIC')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('project_name')
+                    ->label('Nama Projek')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('invoice_date')
                     ->label('Tgl Invoice')
                     ->date(format: 'd/m/Y')
