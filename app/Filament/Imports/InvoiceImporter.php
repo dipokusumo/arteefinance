@@ -42,7 +42,7 @@ class InvoiceImporter extends Importer
                         ])
                         ->first();
 
-                    if (! $pphType) {
+                    if (!$pphType) {
                         throw ValidationException::withMessages([
                             'pph_type_id' => "PPh Type '{$state}' tidak ditemukan.",
                         ]);
@@ -170,7 +170,7 @@ class InvoiceImporter extends Importer
             ->whereRaw('LOWER(name) = ?', [strtolower(trim($name))])
             ->first();
 
-        if (! $taxpayer) {
+        if (!$taxpayer) {
             $taxpayer = Taxpayer::create([
                 'name' => $name,
                 'npwp' => static::formatIdentityNumber(
@@ -189,7 +189,7 @@ class InvoiceImporter extends Importer
             (string) ($this->originalData['PIC'] ?? '')
         );
 
-        if (! blank($picName)) {
+        if (!blank($picName)) {
 
             $pic = Pic::query()
                 ->whereRaw('LOWER(name) = ?', [
@@ -197,7 +197,7 @@ class InvoiceImporter extends Importer
                 ])
                 ->first();
 
-            if (! $pic) {
+            if (!$pic) {
                 $pic = Pic::create([
                     'name' => $picName,
                     'email' => null,
