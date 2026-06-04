@@ -16,78 +16,18 @@ class InvoiceImporter extends Importer
     {
         return [
             ImportColumn::make('taxpayer_id')
-                ->label('Wajib Pajak')
-                ->requiredMapping()
-                ->guess([
-                    'Keterangan / Nama'
-                ])
-                ->castStateUsing(function ($state) {
-                    $name = static::formatTaxpayerName($state);
-
-                    $taxpayer = Taxpayer::query()
-                        ->whereRaw('LOWER(name) = ?', [strtolower($name)])
-                        ->first();
-
-                    if (!$taxpayer) {
-                        throw ValidationException::withMessages([
-                            'taxpayer_id' => "Taxpayer '{$name}' tidak ditemukan.",
-                        ]);
-                    }
-
-                    return $taxpayer->id;
-                }),
-
+                ->numeric()
+                ->rules(['integer']),
             ImportColumn::make('pph_type_id')
-                ->label('Jenis PPh')
-                ->requiredMapping()
-                ->guess([
-                    'Status'
-                ])
-                ->castStateUsing(function ($state) {
-                    $pphType = PphType::query()
-                        ->whereRaw('LOWER(code) = ?', [
-                            strtolower(trim((string) $state))
-                        ])
-                        ->first();
-
-                    if (!$pphType) {
-                        throw ValidationException::withMessages([
-                            'pph_type_id' => "PPh Type '{$state}' tidak ditemukan.",
-                        ]);
-                    }
-
-                    return $pphType->id;
-                }),
-
+                ->numeric()
+                ->rules(['integer']),
             ImportColumn::make('pic_id')
-                ->label('PIC')
-                ->castStateUsing(function ($state) {
-                    if (blank($state)) {
-                        return null;
-                    }
-
-                    $pic = Pic::query()
-                        ->whereRaw('LOWER(name) = ?', [
-                            strtolower(trim((string) $state))
-                        ])
-                        ->first();
-
-                    if (!$pic) {
-                        throw ValidationException::withMessages([
-                            'pic_id' => "PIC '{$state}' tidak ditemukan.",
-                        ]);
-                    }
-
-                    return $pic->id;
-                }),
-
-            ImportColumn::make('project_name')
-                ->label('Nama Projek')
-                ->requiredMapping()
-                ->guess([
-                    'Project / campaign'
-                ]),
-
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('created_by')
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('project_name'),
             ImportColumn::make('invoice_number')
                 ->rules(['max:255']),
             ImportColumn::make('reference_number')
@@ -189,9 +129,6 @@ class InvoiceImporter extends Importer
 
         $taxpayer = Taxpayer::query()
             ->whereRaw('LOWER(name) = ?', [strtolower(trim($name))])
-=======
-            ->whereRaw('LOWER(name) = ?', [strtolower(trim($name))])
->>>>>>> 2083cf6 (fix: invoice filter)
             ->first();
 
         if (!$taxpayer) {
@@ -270,6 +207,9 @@ class InvoiceImporter extends Importer
                 'date' => "Format tanggal '{$value}' tidak valid.",
             ]);
         }
+=======
+        return new Invoice();
+>>>>>>> 88399c8 (feat: importer invoice (wip0)
     }
 
     public static function getCompletedNotificationBody(Import $import): string

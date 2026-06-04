@@ -17,6 +17,11 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Filament\Tables\Enums\FiltersLayout;
 use App\Filament\Exports\InvoiceExporter;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Tables\Filters\Indicator;
+use App\Filament\Imports\InvoiceImporter;
+use Filament\Actions\ImportAction;
 
 
 
@@ -320,6 +325,12 @@ class InvoicesTable
 
                         return $indicators;
                     }),
+
+            ], layout: FiltersLayout::AboveContentCollapsible)
+            ->filtersFormColumns(1)   // outer shell is 1 col; sections control inner layout
+            ->headerActions([
+                ImportAction::make()
+                    ->importer(InvoiceImporter::class)
             ])
             ->recordActions([
                 ViewAction::make(),
