@@ -26,10 +26,15 @@ class TaxpayerImporter extends Importer
 
         $replacements = [
             'Pt ' => 'PT ',
+            'Pt. ' => 'PT ',
             'Cv ' => 'CV ',
+            'Cv. ' => 'CV ',
             'Ud ' => 'UD ',
+            'Ud. ' => 'UD ',
             'Tbk' => 'Tbk',
+            'Tbk.' => 'Tbk',
             'Pkp' => 'PKP',
+            'Pkp.' => 'PKP',
             'Bumd' => 'BUMD',
             'Bumn' => 'BUMN',
             'Persero' => 'Persero',
