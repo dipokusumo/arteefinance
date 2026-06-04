@@ -53,7 +53,9 @@ class Invoice extends Model
         static::saving(function (Invoice $invoice): void {
             $invoice->base_amount = ParseCurrency::parseCurrency($invoice->base_amount);
 
-            if (!$invoice->pphType || !$invoice->base_amount) {
+            $pphType = $invoice->pphType()->first();
+
+            if (!$pphType || !$invoice->base_amount) {
                 $invoice->pph_amount = 0;
                 $invoice->gross_up_amount = 0;
                 $invoice->take_home_pay = 0;
@@ -62,11 +64,11 @@ class Invoice extends Model
                 return;
             }
 
-            $factor = (float) $invoice->pphType->factor;
+            $factor = (float) $pphType->factor;
 
-            $taxRate = (float) $invoice->pphType->tax_rate;
+            $taxRate = (float) $pphType->tax_rate;
 
-            $isGrossUp = (bool) $invoice->pphType->is_gross_up;
+            $isGrossUp = (bool) $pphType->is_gross_up;
 
             $pphAmount = $invoice->base_amount / $factor * $taxRate / 100;
 
