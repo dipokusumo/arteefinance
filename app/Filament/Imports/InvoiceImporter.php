@@ -118,6 +118,7 @@ class InvoiceImporter extends Importer
         }
 
         $name = str($value)
+            ->squish()
             ->lower()
             ->title()
             ->toString();
@@ -166,7 +167,7 @@ class InvoiceImporter extends Importer
         );
 
         $taxpayer = Taxpayer::query()
-            ->whereRaw('LOWER(name) = ?', [strtolower($name)])
+            ->whereRaw('LOWER(name) = ?', [strtolower(trim($name))])
             ->first();
 
         if (! $taxpayer) {
