@@ -181,6 +181,66 @@ class InvoiceImporter extends Importer
         return $name;
     }
 
+    protected function beforeValidate(): void
+    {
+        $name = static::formatTaxpayerName(
+            $this->originalData['Keterangan / Nama'] ?? null
+        );
+
+        $taxpayer = Taxpayer::query()
+            ->whereRaw('LOWER(name) = ?', [strtolower($name)])
+            ->first();
+
+        if (!$taxpayer) {
+            $taxpayer = Taxpayer::create([
+                'name' => $name,
+                'npwp' => static::formatIdentityNumber(
+                    $this->originalData['NPWP'] ?? null
+                ),
+                'nik' => static::formatIdentityNumber(
+                    $this->originalData['NIK'] ?? null
+                ),
+                'address' => $this->originalData['Alamat'] ?? null,
+            ]);
+        }
+
+        $this->data['taxpayer_id'] = $taxpayer->id;
+
+        $picName = trim(
+            (string) ($this->originalData['PIC'] ?? '')
+        );
+
+        if (!blank($picName)) {
+
+            $pic = Pic::query()
+                ->whereRaw('LOWER(name) = ?', [
+                    strtolower($picName),
+                ])
+                ->first();
+
+            if (!$pic) {
+                $pic = Pic::create([
+                    'name' => $picName,
+                    'email' => null,
+                    'phone' => null,
+                ]);
+            }
+
+            $this->data['pic_id'] = $pic->id;
+        } else {
+            $this->data['pic_id'] = null;
+        }
+    }
+
+    protected static function formatIdentityNumber(mixed $value): ?string
+    {
+        if (blank($value)) {
+            return null;
+        }
+
+        return preg_replace('/\s+/', '', (string) $value);
+    }
+
     protected static function parseBooleanStatic(mixed $value): bool
     {
         if (blank($value)) {
