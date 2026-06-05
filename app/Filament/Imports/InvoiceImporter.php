@@ -26,23 +26,8 @@ class InvoiceImporter extends Importer
                 ->label('Wajib Pajak')
                 ->requiredMapping()
                 ->guess([
-                    'Keterangan / Nama'
-                ])
-                ->castStateUsing(function ($state) {
-                    $name = static::formatTaxpayerName($state);
-
-                    $taxpayer = Taxpayer::query()
-                        ->whereRaw('LOWER(name) = ?', [strtolower($name)])
-                        ->first();
-
-                    if (! $taxpayer) {
-                        throw ValidationException::withMessages([
-                            'taxpayer_id' => "Taxpayer '{$name}' tidak ditemukan.",
-                        ]);
-                    }
-
-                    return $taxpayer->id;
-                }),
+                    'Keterangan / Nama',
+                ]),
 
             ImportColumn::make('pph_type_id')
                 ->label('Jenis PPh')
@@ -67,26 +52,7 @@ class InvoiceImporter extends Importer
                 }),
 
             ImportColumn::make('pic_id')
-                ->label('PIC')
-                ->castStateUsing(function ($state) {
-                    if (blank($state)) {
-                        return null;
-                    }
-
-                    $pic = Pic::query()
-                        ->whereRaw('LOWER(name) = ?', [
-                            strtolower(trim((string) $state))
-                        ])
-                        ->first();
-
-                    if (! $pic) {
-                        throw ValidationException::withMessages([
-                            'pic_id' => "PIC '{$state}' tidak ditemukan.",
-                        ]);
-                    }
-
-                    return $pic->id;
-                }),
+                ->label('PIC'),
 
             ImportColumn::make('project_name')
                 ->label('Nama Projek')
@@ -191,6 +157,66 @@ class InvoiceImporter extends Importer
         );
 
         return $name;
+    }
+
+    protected function beforeValidate(): void
+    {
+        $name = static::formatTaxpayerName(
+            $this->originalData['Keterangan / Nama'] ?? null
+        );
+
+        $taxpayer = Taxpayer::query()
+            ->whereRaw('LOWER(name) = ?', [strtolower($name)])
+            ->first();
+
+        if (! $taxpayer) {
+            $taxpayer = Taxpayer::create([
+                'name' => $name,
+                'npwp' => static::formatIdentityNumber(
+                    $this->originalData['NPWP'] ?? null
+                ),
+                'nik' => static::formatIdentityNumber(
+                    $this->originalData['NIK'] ?? null
+                ),
+                'address' => $this->originalData['Alamat'] ?? null,
+            ]);
+        }
+
+        $this->data['taxpayer_id'] = $taxpayer->id;
+
+        $picName = trim(
+            (string) ($this->originalData['PIC'] ?? '')
+        );
+
+        if (! blank($picName)) {
+
+            $pic = Pic::query()
+                ->whereRaw('LOWER(name) = ?', [
+                    strtolower($picName),
+                ])
+                ->first();
+
+            if (! $pic) {
+                $pic = Pic::create([
+                    'name' => $picName,
+                    'email' => null,
+                    'phone' => null,
+                ]);
+            }
+
+            $this->data['pic_id'] = $pic->id;
+        } else {
+            $this->data['pic_id'] = null;
+        }
+    }
+
+    protected static function formatIdentityNumber(mixed $value): ?string
+    {
+        if (blank($value)) {
+            return null;
+        }
+
+        return preg_replace('/\s+/', '', (string) $value);
     }
 
     protected static function parseBooleanStatic(mixed $value): bool
