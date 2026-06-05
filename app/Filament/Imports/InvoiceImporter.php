@@ -19,8 +19,23 @@ class InvoiceImporter extends Importer
                 ->label('Wajib Pajak')
                 ->requiredMapping()
                 ->guess([
-                    'Keterangan / Nama',
-                ]),
+                    'Keterangan / Nama'
+                ])
+                ->castStateUsing(function ($state) {
+                    $name = static::formatTaxpayerName($state);
+
+                    $taxpayer = Taxpayer::query()
+                        ->whereRaw('LOWER(name) = ?', [strtolower($name)])
+                        ->first();
+
+                    if (!$taxpayer) {
+                        throw ValidationException::withMessages([
+                            'taxpayer_id' => "Taxpayer '{$name}' tidak ditemukan.",
+                        ]);
+                    }
+
+                    return $taxpayer->id;
+                }),
 
             ImportColumn::make('pph_type_id')
                 ->label('Jenis PPh')
@@ -45,7 +60,26 @@ class InvoiceImporter extends Importer
                 }),
 
             ImportColumn::make('pic_id')
-                ->label('PIC'),
+                ->label('PIC')
+                ->castStateUsing(function ($state) {
+                    if (blank($state)) {
+                        return null;
+                    }
+
+                    $pic = Pic::query()
+                        ->whereRaw('LOWER(name) = ?', [
+                            strtolower(trim((string) $state))
+                        ])
+                        ->first();
+
+                    if (!$pic) {
+                        throw ValidationException::withMessages([
+                            'pic_id' => "PIC '{$state}' tidak ditemukan.",
+                        ]);
+                    }
+
+                    return $pic->id;
+                }),
 
             ImportColumn::make('project_name')
                 ->label('Nama Projek')
@@ -154,21 +188,13 @@ class InvoiceImporter extends Importer
         );
 
         $taxpayer = Taxpayer::query()
-<<<<<<< HEAD
             ->whereRaw('LOWER(name) = ?', [strtolower($name)])
 =======
-<<<<<<< HEAD
             ->whereRaw('LOWER(name) = ?', [strtolower(trim($name))])
->>>>>>> 9b538f2 (feat: auto create taxpayer and pic in invoice importer)
+>>>>>>> 258c1ab (chore: squish taxpayer name)
             ->first();
 
         if (!$taxpayer) {
-=======
-            ->whereRaw('LOWER(name) = ?', [strtolower($name)])
-            ->first();
-
-        if (! $taxpayer) {
->>>>>>> 2f3dab9 (feat: auto create taxpayer and pic in invoice importer)
             $taxpayer = Taxpayer::create([
                 'name' => $name,
                 'npwp' => static::formatIdentityNumber(
@@ -187,11 +213,7 @@ class InvoiceImporter extends Importer
             (string) ($this->originalData['PIC'] ?? '')
         );
 
-<<<<<<< HEAD
         if (!blank($picName)) {
-=======
-        if (! blank($picName)) {
->>>>>>> 2f3dab9 (feat: auto create taxpayer and pic in invoice importer)
 
             $pic = Pic::query()
                 ->whereRaw('LOWER(name) = ?', [
@@ -199,11 +221,7 @@ class InvoiceImporter extends Importer
                 ])
                 ->first();
 
-<<<<<<< HEAD
             if (!$pic) {
-=======
-            if (! $pic) {
->>>>>>> 2f3dab9 (feat: auto create taxpayer and pic in invoice importer)
                 $pic = Pic::create([
                     'name' => $picName,
                     'email' => null,
