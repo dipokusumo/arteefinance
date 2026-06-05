@@ -20,6 +20,7 @@ class TaxpayerImporter extends Importer
         }
 
         $name = str($value)
+            ->squish()
             ->lower()
             ->title()
             ->toString();
