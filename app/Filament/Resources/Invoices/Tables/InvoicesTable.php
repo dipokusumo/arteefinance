@@ -28,7 +28,6 @@ use App\Filament\Imports\InvoiceImporter;
 use Filament\Actions\ImportAction;
 
 
-
 class InvoicesTable
 {
     public static function configure(Table $table): Table
@@ -194,13 +193,13 @@ class InvoicesTable
                                     ->columnSpan(1),
 
                                 TextInput::make('base_amount_min')
-                                    ->label('DPP: Min')
+                                    ->label('Nilai Dasar: Min')
                                     ->numeric()
                                     ->prefix('Rp')
                                     ->placeholder('0'),
 
                                 TextInput::make('base_amount_max')
-                                    ->label('DPP: Maks')
+                                    ->label('Nilai Dasar: Maks')
                                     ->numeric()
                                     ->prefix('Rp')
                                     ->placeholder('Tidak terbatas'),
