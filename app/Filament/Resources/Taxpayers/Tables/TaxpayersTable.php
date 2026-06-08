@@ -24,6 +24,9 @@ class TaxpayersTable
                 TextColumn::make('nik')
                     ->label('NIK')
                     ->searchable(),
+                TextColumn::make('address')
+                    ->limit(50)
+                    ->searchable(),
             ])
             ->filters([
                 //
