@@ -188,10 +188,10 @@ class InvoiceImporter extends Importer
         );
 
         $taxpayer = Taxpayer::query()
-            ->whereRaw('LOWER(name) = ?', [strtolower($name)])
+            ->whereRaw('LOWER(name) = ?', [strtolower(trim($name))])
 =======
             ->whereRaw('LOWER(name) = ?', [strtolower(trim($name))])
->>>>>>> 258c1ab (chore: squish taxpayer name)
+>>>>>>> 2083cf6 (fix: invoice filter)
             ->first();
 
         if (!$taxpayer) {
