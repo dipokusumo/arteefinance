@@ -19,8 +19,15 @@ class InvoiceInfolist
         return $schema
             ->components([
                 Section::make('Informasi Umum')->columnSpanFull()->columns(3)->schema([
+
                     TextEntry::make('taxpayer.name')
                         ->label('Wajib Pajak')
+                        ->placeholder('-'),
+                    TextEntry::make('taxpayer.nik')
+                        ->label('NIK Wajib Pajak')
+                        ->placeholder('-'),
+                    TextEntry::make('taxpayer.ktp')
+                        ->label('KTP Wajib Pajak')
                         ->placeholder('-'),
                     TextEntry::make('pic.name')
                         ->label('PIC')
