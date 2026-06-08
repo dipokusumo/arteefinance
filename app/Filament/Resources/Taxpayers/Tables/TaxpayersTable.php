@@ -32,8 +32,10 @@ class TaxpayersTable
 
                 InlineEditColumn::make('nik')
                     ->label('NIK')
-                    ->searchable()
-                    ->disabledClick(),
+                    ->searchable(),
+                TextColumn::make('address')
+                    ->limit(50)
+                    ->searchable(),
             ])
             ->filters([
                 //

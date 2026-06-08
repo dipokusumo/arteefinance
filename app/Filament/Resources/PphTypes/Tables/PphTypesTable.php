@@ -5,6 +5,7 @@ namespace App\Filament\Resources\PphTypes\Tables;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 
 class PphTypesTable
@@ -26,6 +27,9 @@ class PphTypesTable
                     ->numeric()
                     ->suffix('%')
                     ->sortable(),
+                IconColumn::make('is_gross_up')
+                    ->label('Gross Up')
+                    ->boolean(),
             ])
             ->filters([
                 //

@@ -151,13 +151,13 @@ class InvoicesTable
                                     DatePicker::make('invoice_date_from')
                                         ->label('Invoice: Dari')
                                         ->native(false)
-                                        ->displayFormat('d/m/Y')
+                                        ->displayFormat('d M Y')
                                         ->placeholder('Pilih tanggal'),
 
                                     DatePicker::make('invoice_date_until')
                                         ->label('Invoice: Sampai')
                                         ->native(false)
-                                        ->displayFormat('d/m/Y')
+                                        ->displayFormat('d M Y')
                                         ->placeholder('Pilih tanggal')
 
                                 ]),
@@ -166,13 +166,13 @@ class InvoicesTable
                                     DatePicker::make('payment_date_from')
                                         ->label('Pembayaran: Dari')
                                         ->native(false)
-                                        ->displayFormat('d/m/Y')
+                                        ->displayFormat('d M Y')
                                         ->placeholder('Pilih tanggal'),
 
                                     DatePicker::make('payment_date_until')
                                         ->label('Pembayaran: Sampai')
                                         ->native(false)
-                                        ->displayFormat('d/m/Y')
+                                        ->displayFormat('d M Y')
                                         ->placeholder('Pilih tanggal')
 
                                 ]),
@@ -314,6 +314,10 @@ class InvoicesTable
                             $query->where('input_status', $data['input_status']);
                         }
 
+
+                        if (isset($data['payment_status']) && $data['payment_status'] !== null) {
+                            $query->where('payment_status', $data['payment_status']);
+                        }
                         return $query;
                     })
                     ->indicateUsing(function (array $data): array {
