@@ -52,27 +52,27 @@ class InvoiceInfolist
                         ->label('Nilai Dasar')
                         ->numeric()
                         ->placeholder('-')
-                        ->prefix('IDR '),
+                        ->money('IDR', locale: 'id-ID'),
                     TextEntry::make('pph_amount')
                         ->label('Nilai PPh')
                         ->numeric()
                         ->placeholder('-')
-                        ->prefix('IDR '),
+                        ->money('IDR', locale: 'id-ID'),
                     TextEntry::make('gross_up_amount')
                         ->label('Nilai Gross Up')
                         ->numeric()
                         ->placeholder('-')
-                        ->prefix('IDR '),
+                        ->money('IDR', locale: 'id-ID'),
                     TextEntry::make('take_home_pay')
                         ->label('Jumlah (THP)')
                         ->numeric()
                         ->placeholder('-')
-                        ->prefix('IDR '),
+                        ->money('IDR', locale: 'id-ID'),
                     TextEntry::make('djp_tax_amount')
                         ->label('Nilai Pajak DJP')
                         ->numeric()
                         ->placeholder('-')
-                        ->prefix('IDR '),
+                        ->money('IDR', locale: 'id-ID'),
                     Section::make('Informasi Tambahan')->contained(false)->schema([
                         TextEntry::make('invoice_number')
                             ->label('Nomor Invoice')

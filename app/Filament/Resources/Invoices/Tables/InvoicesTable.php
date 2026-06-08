@@ -43,12 +43,12 @@ class InvoicesTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('invoice_date')
-                    ->label('Tanggal Invoice')
-                    ->date(format: 'd M Y')
+                    ->label('Tgl Invoice')
+                    ->date(format: 'd/m/Y')
                     ->sortable(),
                 TextColumn::make('payment_date')
-                    ->label('Tanggal Pembayaran')
-                    ->date(format: 'd M Y')
+                    ->label('Tgl Pembayaran')
+                    ->date(format: 'd/m/Y')
                     ->sortable(),
                 TextColumn::make('pphType.code')
                     ->label('Jenis PPh')
@@ -57,35 +57,35 @@ class InvoicesTable
                     ->label('Nilai Dasar')
                     ->numeric()
                     ->sortable()
-                    ->prefix('IDR '),
+                    ->money('IDR', locale: 'id-ID'),
                 TextColumn::make('pph_amount')
                     ->label('Nilai PPh')
                     ->numeric()
                     ->sortable()
-                    ->prefix('IDR '),
+                    ->money('IDR', locale: 'id-ID'),
                 TextColumn::make('gross_up_amount')
                     ->label('Nilai Gross Up')
                     ->numeric()
                     ->sortable()
-                    ->prefix('IDR ')
+                    ->money('IDR', locale: 'id-ID')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('take_home_pay')
                     ->label('Jumlah (THP)')
                     ->numeric()
                     ->sortable()
-                    ->prefix('IDR '),
+                    ->money('IDR', locale: 'id-ID'),
                 TextColumn::make('djp_tax_amount')
                     ->label('Nilai Pajak DJP')
                     ->numeric()
                     ->sortable()
-                    ->prefix('IDR ')
+                    ->money('IDR', locale: 'id-ID')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('invoice_number')
-                    ->label('Nomor Invoice')
+                    ->label('No Invoice')
                     ->placeholder('-')
                     ->searchable(),
                 TextColumn::make('reference_number')
-                    ->label('Nomor Referensi')
+                    ->label('No Referensi')
                     ->placeholder('-')
                     ->searchable(),
                 TextColumn::make('note')
@@ -153,7 +153,7 @@ class InvoicesTable
                                     DatePicker::make('invoice_date_until')
                                         ->label('Invoice: Sampai')
                                         ->native(false)
-                                        ->displayFormat('d/mm/Y')
+                                        ->displayFormat('d/m/Y')
                                         ->placeholder('Pilih tanggal')
 
                                 ]),
@@ -191,6 +191,7 @@ class InvoicesTable
                                 TextInput::make('base_amount_min')
                                     ->label('Nilai Dasar: Min')
                                     ->numeric()
+
                                     ->prefix('Rp')
                                     ->placeholder('0'),
 
