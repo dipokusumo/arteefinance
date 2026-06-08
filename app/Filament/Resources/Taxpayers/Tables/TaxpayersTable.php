@@ -3,10 +3,15 @@
 namespace App\Filament\Resources\Taxpayers\Tables;
 
 use App\Filament\Imports\TaxpayerImporter;
+use App\Filament\Schemas\Components\InlineEditColumn;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ImportAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
-use Filament\Tables\Columns\TextColumn;
+
+use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Table;
 
 class TaxpayersTable
@@ -15,15 +20,20 @@ class TaxpayersTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                InlineEditColumn::make('name')
                     ->searchable()
-                    ->sortable(),
-                TextColumn::make('npwp')
+                    ->sortable()
+                    ->disabledClick(),
+
+                InlineEditColumn::make('npwp')
                     ->label('NPWP')
-                    ->searchable(),
-                TextColumn::make('nik')
+                    ->searchable()
+                    ->disabledClick(),
+
+                InlineEditColumn::make('nik')
                     ->label('NIK')
-                    ->searchable(),
+                    ->searchable()
+                    ->disabledClick(),
             ])
             ->filters([
                 //
@@ -33,9 +43,15 @@ class TaxpayersTable
                     ->importer(TaxpayerImporter::class)
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
-            ->toolbarActions([]);
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+
+                ]),
+            ]);
     }
 }
