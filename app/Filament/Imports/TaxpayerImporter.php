@@ -115,9 +115,10 @@ class TaxpayerImporter extends Importer
 
     public function resolveRecord(): Taxpayer
     {
-        return new Taxpayer();
+        return Taxpayer::firstOrNew([
+            'name' => $this->data['name'] ?? null,
+        ]);
     }
-
     public static function getCompletedNotificationBody(Import $import): string
     {
         $body = 'Your taxpayer import has completed and '

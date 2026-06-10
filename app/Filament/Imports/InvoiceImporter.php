@@ -42,7 +42,7 @@ class InvoiceImporter extends Importer
                         ])
                         ->first();
 
-                    if (! $pphType) {
+                    if (!$pphType) {
                         throw ValidationException::withMessages([
                             'pph_type_id' => "PPh Type '{$state}' tidak ditemukan.",
                         ]);
@@ -170,17 +170,17 @@ class InvoiceImporter extends Importer
             ->whereRaw('LOWER(name) = ?', [strtolower(trim($name))])
             ->first();
 
-        if (! $taxpayer) {
-            $taxpayer = Taxpayer::create([
-                'name' => $name,
-                'npwp' => static::formatIdentityNumber(
-                    $this->originalData['NPWP'] ?? null
-                ),
-                'nik' => static::formatIdentityNumber(
-                    $this->originalData['NIK'] ?? null
-                ),
-                'address' => $this->originalData['Alamat'] ?? null,
-            ]);
+        if (!$taxpayer) {
+            $taxpayer = Taxpayer::updateOrCreate(
+                [
+                    'name' => $name,
+                ],
+                [
+                    'npwp' => static::formatIdentityNumber($this->originalData['NPWP'] ?? null),
+                    'nik' => static::formatIdentityNumber($this->originalData['NIK'] ?? null),
+                    'address' => $this->originalData['Alamat'] ?? null,
+                ]
+            );
         }
 
         $this->data['taxpayer_id'] = $taxpayer->id;
@@ -189,7 +189,7 @@ class InvoiceImporter extends Importer
             (string) ($this->originalData['PIC'] ?? '')
         );
 
-        if (! blank($picName)) {
+        if (!blank($picName)) {
 
             $pic = Pic::query()
                 ->whereRaw('LOWER(name) = ?', [
@@ -197,12 +197,16 @@ class InvoiceImporter extends Importer
                 ])
                 ->first();
 
-            if (! $pic) {
-                $pic = Pic::create([
-                    'name' => $picName,
-                    'email' => null,
-                    'phone' => null,
-                ]);
+            if (!$pic) {
+                $pic = Pic::updateOrCreate(
+                    [
+                        'name' => $picName,
+                    ],
+                    [
+                        'email' => null,
+                        'phone' => null,
+                    ]
+                );
             }
 
             $this->data['pic_id'] = $pic->id;
