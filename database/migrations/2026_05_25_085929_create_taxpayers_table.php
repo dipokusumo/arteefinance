@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('taxpayers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->required();
+            $table->string('name')->required()->unique();
             $table->string('npwp')->nullable();
             $table->string('nik')->nullable();
             $table->string('address')->nullable();

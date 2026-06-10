@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\ParseCurrency;
 
 class Invoice extends Model
 {
@@ -12,6 +13,7 @@ class Invoice extends Model
         'pph_type_id',
         'pic_id',
         'created_by',
+        'project_name',
         'invoice_number',
         'reference_number',
         'input_status',
@@ -46,4 +48,44 @@ class Invoice extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    protected static function booted(): void
+    {
+        static::saving(function (Invoice $invoice): void {
+            $invoice->base_amount = ParseCurrency::parseCurrency($invoice->base_amount);
+
+            $pphType = $invoice->pphType()->first();
+
+            if (!$pphType || !$invoice->base_amount) {
+                $invoice->pph_amount = 0;
+                $invoice->gross_up_amount = 0;
+                $invoice->take_home_pay = 0;
+                $invoice->djp_tax_amount = 0;
+
+                return;
+            }
+
+            $factor = (float) $pphType->factor;
+
+            $taxRate = (float) $pphType->tax_rate;
+
+            $isGrossUp = (bool) $pphType->is_gross_up;
+
+            $pphAmount = $invoice->base_amount / $factor * $taxRate / 100;
+
+            if ($isGrossUp) {
+                $grossUpAmount = $invoice->base_amount + $pphAmount;
+
+                $takeHomePay = $grossUpAmount - $pphAmount;
+            } else {
+                $grossUpAmount = $invoice->base_amount;
+
+                $takeHomePay = $invoice->base_amount - $pphAmount;
+            }
+
+            $invoice->pph_amount = $pphAmount;
+            $invoice->gross_up_amount = $grossUpAmount;
+            $invoice->take_home_pay = $takeHomePay;
+            $invoice->djp_tax_amount = $pphAmount;
+        });
+    }
 }

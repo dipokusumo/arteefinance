@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePphType extends CreateRecord
 {
     protected static string $resource = PphTypeResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

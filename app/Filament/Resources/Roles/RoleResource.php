@@ -27,6 +27,10 @@ class RoleResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Role';
 
+    protected static ?string $pluralLabel = 'Roles';
+
+    protected static ?string $label = 'Role';
+
     public static function form(Schema $schema): Schema
     {
         return RoleForm::configure($schema);

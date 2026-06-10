@@ -35,7 +35,7 @@ class User extends Authenticatable
         static::creating(function ($user) {
             if (app()->runningInConsole()) {
                 // dibuat lewat "php artisan make:filament-user"
-                $user->role = 'admin';
+                $user->role_id = 1;
             }
         });
     }
