@@ -26,6 +26,7 @@ use Filament\Schemas\Components\Grid;
 use Filament\Tables\Filters\Indicator;
 use App\Filament\Imports\InvoiceImporter;
 use Filament\Actions\ImportAction;
+use Filament\Tables\Filters\SelectFilter;
 
 
 class InvoicesTable
@@ -131,12 +132,9 @@ class InvoicesTable
                                     ->placeholder('Semua Wajib Pajak'),
 
                                 Select::make('pic_id')
+                                    ->relationship('pic', 'name')
                                     ->label('PIC')
-                                    ->options(
-                                        Pic::query()
-                                            ->orderBy('name')
-                                            ->pluck('name', 'id')
-                                    )
+                                    ->multiple()
                                     ->searchable()
                                     ->preload()
                                     ->placeholder('Semua PIC'),
