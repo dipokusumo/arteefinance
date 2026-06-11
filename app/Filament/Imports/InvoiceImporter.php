@@ -7,13 +7,13 @@ use App\Models\Invoice;
 use App\Models\Pic;
 use App\Models\PphType;
 use App\Models\Taxpayer;
-use Carbon\Carbon;
 use Filament\Actions\Imports\ImportColumn;
 use Filament\Actions\Imports\Importer;
 use Filament\Actions\Imports\Models\Import;
 use Filament\Facades\Filament;
 use Illuminate\Support\Number;
 use Illuminate\Validation\ValidationException;
+use App\Helpers\FormatInput;
 
 class InvoiceImporter extends Importer
 {
@@ -72,22 +72,22 @@ class InvoiceImporter extends Importer
                 ->guess([
                     'Di-Input'
                 ])
-                ->castStateUsing(fn($state) => static::parseBooleanStatic($state)),
+                ->castStateUsing(fn($state) => FormatInput::parseBooleanStatic($state)),
 
             ImportColumn::make('payment_status')
                 ->label('Status Pembayaran')
                 ->guess([
                     'Di-Bayar'
                 ])
-                ->castStateUsing(fn($state) => static::parseBooleanStatic($state)),
+                ->castStateUsing(fn($state) => FormatInput::parseBooleanStatic($state)),
 
             ImportColumn::make('invoice_date')
                 ->label('Tanggal Invoice')
-                ->castStateUsing(fn($state) => static::parseDateStatic($state)),
+                ->castStateUsing(fn($state) => FormatInput::parseDateStatic($state)),
 
             ImportColumn::make('payment_date')
                 ->label('Tanggal Pembayaran')
-                ->castStateUsing(fn($state) => static::parseDateStatic($state)),
+                ->castStateUsing(fn($state) => FormatInput::parseDateStatic($state)),
 
             ImportColumn::make('base_amount')
                 ->label('Nilai Dasar')
@@ -111,58 +111,9 @@ class InvoiceImporter extends Importer
         return $invoice;
     }
 
-    protected static function formatTaxpayerName(?string $value): ?string
-    {
-        if (blank($value)) {
-            return null;
-        }
-
-        $name = str($value)
-            ->squish()
-            ->lower()
-            ->title()
-            ->toString();
-
-        // Singkatan yang harus selalu uppercase
-        $abbreviations = [
-            'Pt' => 'PT',
-            'Pt.' => 'PT',
-            'Cv' => 'CV',
-            'Cv.' => 'CV',
-            'Ud' => 'UD',
-            'Ud.' => 'UD',
-            'Pkp' => 'PKP',
-            'Bumn' => 'BUMN',
-            'Bumd' => 'BUMD',
-        ];
-
-        $words = preg_split('/\s+/', $name);
-
-        foreach ($words as &$word) {
-            $cleanWord = rtrim($word, '.');
-
-            if (isset($abbreviations[$cleanWord])) {
-                $word = $abbreviations[$cleanWord];
-            }
-        }
-
-        // Tangani inisial seperti J.H, A.B.C, dll
-        $name = implode(' ', $words);
-
-        $name = preg_replace_callback(
-            '/\b([A-Za-z])(?:\.([A-Za-z]))+\b/',
-            function ($matches) {
-                return strtoupper($matches[0]);
-            },
-            $name
-        );
-
-        return $name;
-    }
-
     protected function beforeValidate(): void
     {
-        $name = static::formatTaxpayerName(
+        $name = FormatInput::formatTaxpayerName(
             $this->originalData['Keterangan / Nama'] ?? null
         );
 
@@ -176,8 +127,8 @@ class InvoiceImporter extends Importer
                     'name' => $name,
                 ],
                 [
-                    'npwp' => static::formatIdentityNumber($this->originalData['NPWP'] ?? null),
-                    'nik' => static::formatIdentityNumber($this->originalData['NIK'] ?? null),
+                    'npwp' => FormatInput::formatIdentifyNumber($this->originalData['NPWP'] ?? null),
+                    'nik' => FormatInput::formatIdentifyNumber($this->originalData['NIK'] ?? null),
                     'address' => $this->originalData['Alamat'] ?? null,
                 ]
             );
@@ -212,43 +163,6 @@ class InvoiceImporter extends Importer
             $this->data['pic_id'] = $pic->id;
         } else {
             $this->data['pic_id'] = null;
-        }
-    }
-
-    protected static function formatIdentityNumber(mixed $value): ?string
-    {
-        if (blank($value)) {
-            return null;
-        }
-
-        return preg_replace('/\s+/', '', (string) $value);
-    }
-
-    protected static function parseBooleanStatic(mixed $value): bool
-    {
-        if (blank($value)) {
-            return false;
-        }
-
-        return in_array(
-            strtoupper(trim((string) $value)),
-            ['TRUE', '1', 'YES', 'Y'],
-            true
-        );
-    }
-
-    protected static function parseDateStatic(mixed $value): ?string
-    {
-        if (blank($value)) {
-            return null;
-        }
-
-        try {
-            return Carbon::parse($value)->format('Y-m-d');
-        } catch (\Throwable) {
-            throw ValidationException::withMessages([
-                'date' => "Format tanggal '{$value}' tidak valid.",
-            ]);
         }
     }
 

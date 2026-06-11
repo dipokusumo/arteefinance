@@ -48,8 +48,6 @@ class InvoiceInfolist
                                             "Nama: {$record->taxpayer?->name}",
                                             "NPWP: {$record->taxpayer?->npwp}",
                                             "NIK: {$record->taxpayer?->nik}",
-                                            "Email: {$record->taxpayer?->email}",
-                                            "No HP: {$record->taxpayer?->phone}",
                                             "Alamat: {$record->taxpayer?->address}",
                                         ]));
                                     })

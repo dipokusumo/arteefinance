@@ -26,8 +26,7 @@ use Filament\Schemas\Components\Grid;
 use Filament\Tables\Filters\Indicator;
 use App\Filament\Imports\InvoiceImporter;
 use Filament\Actions\ImportAction;
-use Filament\Tables\Filters\SelectFilter;
-
+use App\Helpers\BulkStatusAction;
 
 class InvoicesTable
 {
@@ -371,7 +370,42 @@ class InvoicesTable
                         ->label('Export Excel')
                         ->exporter(InvoiceExporter::class)
                         ->icon('heroicon-s-document-arrow-down'),
-                    DeleteBulkAction::make(),
+                    BulkStatusAction::makeBulkStatusAction(
+                        name: 'markAsInputted',
+                        column: 'input_status',
+                        value: 1,
+                        label: 'Mark as Inputted',
+                        icon: 'heroicon-s-check',
+                        color: 'success'
+                    ),
+                    BulkStatusAction::makeBulkStatusAction(
+                        name: 'markAsNotInputted',
+                        column: 'input_status',
+                        value: 0,
+                        label: 'Mark as Not Inputted',
+                        icon: 'heroicon-s-x-circle',
+                        color: 'warning'
+                    ),
+                    BulkStatusAction::makeBulkStatusAction(
+                        name: 'markAsPaid',
+                        column: 'payment_status',
+                        value: 1,
+                        label: 'Mark as Paid',
+                        icon: 'heroicon-s-currency-dollar',
+                        color: 'success'
+                    ),
+                    BulkStatusAction::makeBulkStatusAction(
+                        name: 'markAsUnpaid',
+                        column: 'payment_status',
+                        value: 0,
+                        label: 'Mark as Unpaid',
+                        icon: 'heroicon-s-x-circle',
+                        color: 'warning'
+                    ),
+                    DeleteBulkAction::make()
+                        ->label('Delete Selected')
+                        ->icon('heroicon-s-trash')
+                        ->requiresConfirmation(),
                 ]),
             ]);
     }

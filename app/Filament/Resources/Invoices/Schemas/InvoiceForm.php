@@ -11,9 +11,13 @@ use Filament\Forms\Components\Select;
 use App\Helpers\ParseCurrency;
 use Filament\Schemas\Components\Fieldset;
 use App\Models\PphType;
+use App\Models\Taxpayer;
+use App\Models\Pic;
 
 use Filament\Forms\Components\Hidden;
 use Filament\Schemas\Schema;
+
+use App\Helpers\FormatInput;
 
 class InvoiceForm
 {
@@ -73,15 +77,97 @@ class InvoiceForm
                         Select::make('taxpayer_id')
                             ->label('Pilih Wajib Pajak')
                             ->searchable()
-                            ->preload()
-                            ->relationship('taxpayer', 'name')
-                            ->required(),
+                            ->relationship(
+                                name: 'taxpayer',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn($query) => $query->orderBy('name')
+                            )
+                            ->required()
+
+                            ->createOptionForm([
+                                TextInput::make('name')
+                                    ->label('Nama Wajib Pajak')
+                                    ->required()
+                                    ->unique(Taxpayer::class, 'name', ignoreRecord: true)
+                                    ->afterStateUpdated(fn($state, callable $set) => $set('name', FormatInput::formatTaxpayerName($state))),
+                                TextInput::make('npwp')
+                                    ->label('NPWP')
+                                    ->afterStateUpdated(fn($state, callable $set) => $set('npwp', FormatInput::formatIdentifyNumber($state))),
+                                TextInput::make('nik')
+                                    ->label('NIK')
+                                    ->afterStateUpdated(fn($state, callable $set) => $set('nik', FormatInput::formatIdentifyNumber($state))),
+                                TextInput::make('address'),
+                            ])
+
+                            ->createOptionUsing(function (array $data): int {
+                                $taxpayer = Taxpayer::create([
+                                    'name' => trim($data['name']),
+                                    'npwp' => $data['npwp'] ?? null,
+                                    'nik' => $data['nik'] ?? null,
+                                    'address' => $data['address'] ?? null,
+                                ]);
+
+                                return $taxpayer->id;
+                            })
+
+                            ->manageOptionForm([
+                                TextInput::make('name')
+                                    ->label('Nama Wajib Pajak')
+                                    ->required()
+                                    ->unique(Taxpayer::class, 'name', ignoreRecord: true)
+                                    ->afterStateUpdated(fn($state, callable $set) => $set('name', FormatInput::formatTaxpayerName($state))),
+                                TextInput::make('npwp')
+                                    ->label('NPWP')
+                                    ->afterStateUpdated(fn($state, callable $set) => $set('npwp', FormatInput::formatIdentifyNumber($state))),
+                                TextInput::make('nik')
+                                    ->label('NIK')
+                                    ->afterStateUpdated(fn($state, callable $set) => $set('nik', FormatInput::formatIdentifyNumber($state))),
+                                TextInput::make('address'),
+                            ]),
                         Select::make('pic_id')
                             ->label('Pilih PIC')
                             ->searchable()
                             ->preload()
                             ->relationship('pic', 'name')
-                            ->required(),
+                            ->required()
+
+                            ->createOptionForm([
+                                TextInput::make('name')
+                                    ->label('Nama PIC')
+                                    ->required()
+                                    ->unique(Pic::class, 'name', ignoreRecord: true)
+                                    ->afterStateUpdated(fn($state, callable $set) => $set('name', FormatInput::formatTaxpayerName($state))),
+                                TextInput::make('email')
+                                    ->label('Email Address')
+                                    ->email(),
+                                TextInput::make('phone')
+                                    ->tel()
+                                    ->afterStateUpdated(fn($state, callable $set) => $set('phone', FormatInput::formatIdentifyNumber($state))),
+                            ])
+
+                            ->createOptionUsing(function (array $data): int {
+                                $pic = Pic::create([
+                                    'name' => trim($data['name']),
+                                    'email' => $data['email'] ?? null,
+                                    'phone' => $data['phone'] ?? null,
+                                ]);
+
+                                return $pic->id;
+                            })
+
+                            ->manageOptionForm([
+                                TextInput::make('name')
+                                    ->label('Nama PIC')
+                                    ->required()
+                                    ->unique(Pic::class, 'name', ignoreRecord: true)
+                                    ->afterStateUpdated(fn($state, callable $set) => $set('name', FormatInput::formatTaxpayerName($state))),
+                                TextInput::make('email')
+                                    ->label('Email Address')
+                                    ->email(),
+                                TextInput::make('phone')
+                                    ->tel()
+                                    ->afterStateUpdated(fn($state, callable $set) => $set('phone', FormatInput::formatIdentifyNumber($state))),
+                            ]),
                         TextInput::make('project_name')
                             ->label('Nama Projek')
                             ->required()

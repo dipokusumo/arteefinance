@@ -9,9 +9,9 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ImportAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
+use App\Helpers\FormatInput;
 
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\TextColumn;
 
 use Filament\Tables\Table;
 
@@ -24,20 +24,43 @@ class TaxpayersTable
                 InlineEditColumn::make('name')
                     ->searchable()
                     ->sortable()
-                    ->disabledClick(),
+                    ->disabledClick()
+                    ->updateStateUsing(function ($state, $record) {
+                        $record->update([
+                            'name' => FormatInput::formatTaxpayerName($state),
+                        ]);
+
+                        return $state;
+                    }),
 
                 InlineEditColumn::make('npwp')
                     ->label('NPWP')
                     ->searchable()
-                    ->disabledClick(),
+                    ->disabledClick()
+                    ->updateStateUsing(function ($state, $record) {
+                        $record->update([
+                            'npwp' => FormatInput::formatIdentifyNumber($state),
+                        ]);
+
+                        return $state;
+                    }),
 
                 InlineEditColumn::make('nik')
                     ->label('NIK')
                     ->searchable()
-                    ->disabledClick(),
-                TextColumn::make('address')
+                    ->disabledClick()
+                    ->updateStateUsing(function ($state, $record) {
+                        $record->update([
+                            'nik' => FormatInput::formatIdentifyNumber($state),
+                        ]);
+
+                        return $state;
+                    }),
+
+                InlineEditColumn::make('address')
                     ->limit(50)
-                    ->searchable(),
+                    ->searchable()
+                    ->disabledClick(),
             ])
             ->filters([
                 //

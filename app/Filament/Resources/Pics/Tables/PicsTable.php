@@ -4,8 +4,13 @@ namespace App\Filament\Resources\Pics\Tables;
 
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Schemas\Components\InlineEditColumn;
+use App\Helpers\FormatInput;
+use Illuminate\Support\Facades\Validator;
+use Filament\Actions\ViewAction;
 
 class PicsTable
 {
@@ -13,23 +18,61 @@ class PicsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                InlineEditColumn::make('name')
                     ->searchable()
-                    ->sortable(),
-                TextColumn::make('email')
+                    ->sortable()
+                    ->updateStateUsing(function ($state, $record) {
+                        $record->update([
+                            'name' => FormatInput::formatTaxpayerName($state),
+                        ]);
+
+                        return $state;
+                    })
+                    ->disabledClick(),
+                InlineEditColumn::make('email')
                     ->label('Email Address')
-                    ->searchable(),
-                TextColumn::make('phone')
-                    ->searchable(),
+                    ->searchable()
+                    ->updateStateUsing(function ($state, $record) {
+                        Validator::make(
+                            ['email' => $state],
+                            [
+                                'email' => [
+                                    'nullable',
+                                    'email',
+                                ],
+                            ]
+                        )->validate();
+
+                        $record->update([
+                            'email' => $state,
+                        ]);
+
+                        return $state;
+                    })
+                    ->disabledClick(),
+                InlineEditColumn::make('phone')
+                    ->searchable()
+                    ->updateStateUsing(function ($state, $record) {
+                        $record->update([
+                            'phone' => FormatInput::formatIdentifyNumber($state),
+                        ]);
+
+                        return $state;
+                    })
+                    ->disabledClick(),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
             ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
             ]);
     }
 }
